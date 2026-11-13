@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Eye } from "lucide-react";
 import { sessionStore } from "@/lib/session";
 
@@ -24,6 +25,7 @@ const ClosedEyeIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5"
 );
 
 export const OnboardingFlow: React.FC = () => {
+  const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,6 +59,9 @@ export const OnboardingFlow: React.FC = () => {
       email: email.trim(),
       isGuest: false,
     });
+
+    // TODO: Temporary shortcut directly to workspace as requested. Remove once Onboarding 2 & 3 artwork is ready.
+    router.push("/challenge/reverse-string");
   };
 
   const handleGoogleSignIn = () => {
@@ -64,6 +69,9 @@ export const OnboardingFlow: React.FC = () => {
       email: "guest.student@example.com",
       isGuest: true,
     });
+
+    // TODO: Temporary shortcut directly to workspace as requested. Remove once Onboarding 2 & 3 artwork is ready.
+    router.push("/challenge/reverse-string");
   };
 
   return (
