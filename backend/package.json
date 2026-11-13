@@ -9,17 +9,26 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@ai-sdk/cerebras": "^3.0.92",
+    "@ai-sdk/google": "^4.0.120",
+    "@ai-sdk/groq": "^4.0.83",
+    "@ai-sdk/openai-compatible": "^3.0.92",
+    "@ai-sdk/togetherai": "^3.0.93",
     "@mentor/shared": "*",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "@supabase/supabase-js": "^2.119.0",
+    "ai": "^7.0.172",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3",
+    "express-rate-limit": "^8.7.4",
+    "helmet": "^8.3.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/node": "^20.17.19",
-    "tsx": "^4.19.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^20.19.43",
+    "tsx": "^4.23.15",
     "typescript": "^5.7.3"
   }
 }
-

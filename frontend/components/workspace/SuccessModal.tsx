@@ -188,3 +188,4 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
     </Modal>
   );
 };
+

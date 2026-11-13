@@ -28,3 +28,4 @@ export function getAllChallenges(): Challenge[] {
 export function getChallengeById(id: string): Challenge | null {
   return challenges.find((c) => c.id === id) || null;
 }
+

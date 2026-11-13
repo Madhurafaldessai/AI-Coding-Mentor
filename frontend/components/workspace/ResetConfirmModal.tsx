@@ -45,3 +45,4 @@ export const ResetConfirmModal: React.FC<ResetConfirmModalProps> = ({
     </Modal>
   );
 };
+
