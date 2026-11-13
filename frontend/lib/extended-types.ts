@@ -41,3 +41,4 @@ export interface UnifiedChallenge {
   starterCode: Record<Lang, string>;
   testCases: TestCase[];
 }
+

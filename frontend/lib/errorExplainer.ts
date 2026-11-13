@@ -236,3 +236,4 @@ export function explainError(
     suggestion: "Expand the raw output below to inspect the exact line and error details.",
   };
 }
+
