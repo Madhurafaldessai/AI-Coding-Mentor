@@ -1,29 +1,19 @@
 {
-  "name": "ai-coding-mentor",
-  "version": "0.1.0",
+  "name": "ai-coding-mentor-monorepo",
+  "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "shared",
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@monaco-editor/react": "^4.7.0",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.72.0",
-    "next": "16.4.6",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "dev": "concurrently -n \"frontend,backend\" -c \"cyan,magenta\" \"npm run dev --workspace=@mentor/frontend\" \"npm run dev --workspace=@mentor/backend\"",
+    "dev:frontend": "npm run dev --workspace=@mentor/frontend",
+    "dev:backend": "npm run dev --workspace=@mentor/backend",
+    "build": "npm run build --workspace=@mentor/backend && npm run build --workspace=@mentor/frontend"
   },
   "devDependencies": {
-    "@tailwindcss/turbopack": "4.3.3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.4.6",
-    "tailwindcss": "4.3.3",
-    "typescript": "^5"
+    "concurrently": "^9.1.2"
   }
 }

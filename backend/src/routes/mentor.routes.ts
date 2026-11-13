@@ -1,0 +1,9 @@
+import { Router } from "express";
+import { handleMentorRequest } from "../controllers/mentor.controller";
+
+const router = Router();
+
+// POST /api/mentor
+router.post("/mentor", handleMentorRequest);
+
+export default router;
