@@ -1,0 +1,19 @@
+[
+  {
+    "id": "reverse-string",
+    "title": "Reverse a String",
+    "difficulty": "Easy",
+    "concept": "Strings & Loops",
+    "description": "Write a program that takes a string from standard input and prints the reversed string to standard output.",
+    "starterCode": {
+      "python": "import sys\n\ndef solve():\n    # Read input from standard input\n    text = sys.stdin.read().strip()\n    # TODO: Reverse and print the string\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+      "javascript": "const fs = require('fs');\n\nfunction solve() {\n  const text = fs.readFileSync(0, 'utf-8').trim();\n  // TODO: Reverse and print the string\n}\n\nsolve();\n",
+      "cpp": "#include <iostream>\n#include <string>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    string s;\n    if (cin >> s) {\n        // TODO: Reverse and print\n    }\n    return 0;\n}\n"
+    },
+    "testCases": [
+      { "input": "hello", "expected": "olleh" },
+      { "input": "world", "expected": "dlrow" },
+      { "input": "code", "expected": "edoc" }
+    ]
+  }
+]
