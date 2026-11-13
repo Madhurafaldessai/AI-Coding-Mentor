@@ -4,17 +4,50 @@
     "title": "Reverse a String",
     "difficulty": "Easy",
     "concept": "Strings & Loops",
-    "description": "Write a program that takes a string from standard input and prints the reversed string to standard output.",
+    "description": "Write a program that reads a string from standard input and prints its exact reverse to standard output.",
     "starterCode": {
-      "python": "import sys\n\ndef solve():\n    # Read input from standard input\n    text = sys.stdin.read().strip()\n    # TODO: Reverse and print the string\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
-      "javascript": "const fs = require('fs');\n\nfunction solve() {\n  const text = fs.readFileSync(0, 'utf-8').trim();\n  // TODO: Reverse and print the string\n}\n\nsolve();\n",
+      "python": "import sys\n\ndef solve():\n    # Read input string\n    text = sys.stdin.read().strip()\n    # TODO: Print the reversed string\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+      "javascript": "const fs = require('fs');\n\nfunction solve() {\n  const text = fs.readFileSync(0, 'utf-8').trim();\n  // TODO: Print the reversed string\n}\n\nsolve();\n",
       "cpp": "#include <iostream>\n#include <string>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    string s;\n    if (cin >> s) {\n        // TODO: Reverse and print\n    }\n    return 0;\n}\n"
     },
     "testCases": [
       { "input": "hello", "expected": "olleh" },
       { "input": "world", "expected": "dlrow" },
-      { "input": "code", "expected": "edoc" }
+      { "input": "coding", "expected": "gnidoc" }
+    ]
+  },
+  {
+    "id": "find-max",
+    "title": "Find the Maximum Number",
+    "difficulty": "Easy",
+    "concept": "Arrays & Iteration",
+    "description": "Given space-separated integers on standard input, determine and print the largest integer.",
+    "starterCode": {
+      "python": "import sys\n\ndef solve():\n    numbers = list(map(int, sys.stdin.read().split()))\n    # TODO: Find and print the maximum value\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+      "javascript": "const fs = require('fs');\n\nfunction solve() {\n  const input = fs.readFileSync(0, 'utf-8').trim();\n  const numbers = input.split(/\\s+/).map(Number);\n  // TODO: Find and print the maximum value\n}\n\nsolve();\n",
+      "cpp": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int val, maxVal = -1e9;\n    while (cin >> val) {\n        // TODO: Update maxVal\n    }\n    cout << maxVal << endl;\n    return 0;\n}\n"
+    },
+    "testCases": [
+      { "input": "3 9 2 7 1", "expected": "9" },
+      { "input": "-5 -2 -10 -1", "expected": "-1" },
+      { "input": "42", "expected": "42" }
+    ]
+  },
+  {
+    "id": "two-sum",
+    "title": "Two Sum Target",
+    "difficulty": "Medium",
+    "concept": "Hash Maps",
+    "description": "Given a target sum on the first line and space-separated numbers on the second line, print the 0-based indices of the two numbers that add up to the target in ascending order.",
+    "starterCode": {
+      "python": "import sys\n\ndef solve():\n    lines = sys.stdin.read().strip().split('\\n')\n    target = int(lines[0])\n    nums = list(map(int, lines[1].split()))\n    # TODO: Print indices separated by space (e.g. 0 1)\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+      "javascript": "const fs = require('fs');\n\nfunction solve() {\n  const [targetStr, numsStr] = fs.readFileSync(0, 'utf-8').trim().split('\\n');\n  const target = Number(targetStr);\n  const nums = numsStr.split(/\\s+/).map(Number);\n  // TODO: Print indices separated by space\n}\n\nsolve();\n",
+      "cpp": "#include <iostream>\n#include <vector>\n#include <unordered_map>\n\nusing namespace std;\n\nint main() {\n    int target;\n    cin >> target;\n    vector<int> nums;\n    int n;\n    while (cin >> n) nums.push_back(n);\n    // TODO: Output matching indices\n    return 0;\n}\n"
+    },
+    "testCases": [
+      { "input": "9\n2 7 11 15", "expected": "0 1" },
+      { "input": "6\n3 2 4", "expected": "1 2" },
+      { "input": "6\n3 3", "expected": "0 1" }
     ]
   }
 ]
-

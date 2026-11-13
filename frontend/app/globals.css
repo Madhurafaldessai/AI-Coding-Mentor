@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  /* Design Tokens */
+  --color-brand-blue: #0095ff;
+  --color-brand-blue-hover: #0080db;
+  --color-brand-lavender: #a855f7;
+  --color-brand-lavender-light: #c084fc;
+  --color-brand-cyan: #38bdf8;
+  --color-brand-cyan-light: #a5f3fc;
+  --color-brand-green: #16a34a;
+  --color-brand-green-light: #22c55e;
+  --color-brand-amber: #f59e0b;
+  --color-brand-rose: #f43f5e;
+  
+  --color-dark-border: #0f172a;
+  --color-surface-card: #ffffff;
+  --color-surface-muted: #f1f5f9;
+
+  /* Shadows (Hard Offset, No Blur) */
+  --shadow-retro-sm: 2px 2px 0px #0f172a;
+  --shadow-retro: 3px 3px 0px #0f172a;
+  --shadow-retro-lg: 4px 4px 0px #0f172a;
+  --shadow-retro-cyan: 3px 3px 0px #0284c7;
+  --shadow-retro-lavender: 3px 3px 0px #7e22ce;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-pixel: var(--font-pixel), "Pixelify Sans", monospace;
+
+  --color-brand-blue: var(--color-brand-blue);
+  --color-brand-blue-hover: var(--color-brand-blue-hover);
+  --color-brand-lavender: var(--color-brand-lavender);
+  --color-brand-lavender-light: var(--color-brand-lavender-light);
+  --color-brand-cyan: var(--color-brand-cyan);
+  --color-brand-cyan-light: var(--color-brand-cyan-light);
+  --color-brand-green: var(--color-brand-green);
+  --color-brand-green-light: var(--color-brand-green-light);
+  --color-brand-amber: var(--color-brand-amber);
+  --color-brand-rose: var(--color-brand-rose);
+
+  --color-retro-dark: var(--color-dark-border);
+  --color-surface: var(--color-surface-card);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Custom Retro Utility Classes */
+.font-pixel {
+  font-family: var(--font-pixel), cursive, monospace;
+  letter-spacing: 0.02em;
+}
+
+.shadow-retro-sm {
+  box-shadow: 2px 2px 0px #0f172a;
+}
+
+.shadow-retro {
+  box-shadow: 3px 3px 0px #0f172a;
+}
+
+.shadow-retro-lg {
+  box-shadow: 4px 4px 0px #0f172a;
+}
+
+.shadow-retro-cyan {
+  box-shadow: 3px 3px 0px #0284c7;
+}
+
+.shadow-retro-lavender {
+  box-shadow: 3px 3px 0px #7e22ce;
+}
+
+/* Interactive Tactile Press State */
+.retro-press {
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.retro-press:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #0f172a;
+}
+
+.retro-press:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px #0f172a;
+}
+
+/* Pixel Art Image Rendering */
+.image-pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

@@ -1,0 +1,143 @@
+{
+  "python": [
+    {
+      "id": "py-node-1",
+      "title": "Hello World",
+      "concept": "Standard I/O",
+      "challengeId": "hello-world",
+      "status": "completed",
+      "xp": 20,
+      "description": "Learn to read from stdin and write to stdout in Python."
+    },
+    {
+      "id": "py-node-2",
+      "title": "Variables & Types",
+      "concept": "Data Types",
+      "challengeId": "variables-types",
+      "status": "completed",
+      "xp": 30,
+      "description": "Master integer casting, strings, and float operations."
+    },
+    {
+      "id": "py-node-3",
+      "title": "Strings & Loops",
+      "concept": "Strings & Loops",
+      "challengeId": "reverse-string",
+      "status": "current",
+      "xp": 50,
+      "description": "Iterate through characters and reverse string structures."
+    },
+    {
+      "id": "py-node-4",
+      "title": "Lists & Slicing",
+      "concept": "Arrays & Slicing",
+      "challengeId": "find-max",
+      "status": "locked",
+      "xp": 60,
+      "description": "Traverse sequences, search bounds, and aggregate values."
+    },
+    {
+      "id": "py-node-5",
+      "title": "Dictionaries & Sets",
+      "concept": "Hash Maps",
+      "challengeId": "two-sum",
+      "status": "locked",
+      "xp": 80,
+      "description": "Fast O(1) lookups using key-value pair collections."
+    }
+  ],
+  "javascript": [
+    {
+      "id": "js-node-1",
+      "title": "Console & Input",
+      "concept": "Standard I/O",
+      "challengeId": "hello-world",
+      "status": "completed",
+      "xp": 20,
+      "description": "Read standard input synchronously and log output."
+    },
+    {
+      "id": "js-node-2",
+      "title": "Variables & Scope",
+      "concept": "Let vs Const",
+      "challengeId": "variables-types",
+      "status": "completed",
+      "xp": 30,
+      "description": "Understand modern variable declarations and block scopes."
+    },
+    {
+      "id": "js-node-3",
+      "title": "Strings & Loops",
+      "concept": "Strings & Loops",
+      "challengeId": "reverse-string",
+      "status": "current",
+      "xp": 50,
+      "description": "Manipulate strings, for-of loops, and array conversions."
+    },
+    {
+      "id": "js-node-4",
+      "title": "Arrays & Methods",
+      "concept": "Array Iteration",
+      "challengeId": "find-max",
+      "status": "locked",
+      "xp": 60,
+      "description": "Map, filter, reduce, and array indexing."
+    },
+    {
+      "id": "js-node-5",
+      "title": "Objects & Maps",
+      "concept": "Hash Maps",
+      "challengeId": "two-sum",
+      "status": "locked",
+      "xp": 80,
+      "description": "Hash maps and object dictionaries in JavaScript."
+    }
+  ],
+  "cpp": [
+    {
+      "id": "cpp-node-1",
+      "title": "Cin & Cout",
+      "concept": "Streams & I/O",
+      "challengeId": "hello-world",
+      "status": "completed",
+      "xp": 20,
+      "description": "Basic C++ stream input/output and namespaces."
+    },
+    {
+      "id": "cpp-node-2",
+      "title": "Primitive Types",
+      "concept": "Data Types",
+      "challengeId": "variables-types",
+      "status": "completed",
+      "xp": 30,
+      "description": "Integers, doubles, chars, and memory sizes."
+    },
+    {
+      "id": "cpp-node-3",
+      "title": "Strings & Loops",
+      "concept": "Strings & Loops",
+      "challengeId": "reverse-string",
+      "status": "current",
+      "xp": 50,
+      "description": "std::string manipulation and loop traversal."
+    },
+    {
+      "id": "cpp-node-4",
+      "title": "Vectors & Bounds",
+      "concept": "Dynamic Arrays",
+      "challengeId": "find-max",
+      "status": "locked",
+      "xp": 60,
+      "description": "std::vector operations, iterators, and bounds safety."
+    },
+    {
+      "id": "cpp-node-5",
+      "title": "Unordered Maps",
+      "concept": "Hash Tables",
+      "challengeId": "two-sum",
+      "status": "locked",
+      "xp": 80,
+      "description": "std::unordered_map hashing and lookups in C++."
+    }
+  ]
+}
