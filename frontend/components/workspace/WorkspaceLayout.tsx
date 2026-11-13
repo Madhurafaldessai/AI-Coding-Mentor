@@ -69,6 +69,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ challenge }) =
 
   // Track Python worker readiness
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync worker state after hydration.
     setIsPythonReady(runnerService.isPythonReady());
     const unsubscribe = runnerService.onPythonReady(() => {
       setIsPythonReady(true);

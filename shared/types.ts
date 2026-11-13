@@ -26,6 +26,7 @@ export type MentorResponse = {
   level: 1 | 2 | 3 | 4;
   concept: string;
   confidence_signal: "stuck" | "close" | "confused_basics";
+  costXp?: number;
 };
 
 export type AttemptPayload = {
@@ -35,6 +36,8 @@ export type AttemptPayload = {
   total: number;
   errorType?: string;
   hintLevelUsed: number;
+  language?: Lang;
+  runtimeMs?: number;
 };
 
 export type ProgressResponse = {
@@ -44,5 +47,10 @@ export type ProgressResponse = {
   streak: number;
   newBadges: string[];
   nextChallengeId: string;
+  xpBreakdown?: { label: string; amount: number }[];
+  xpIntoLevel?: number;
+  xpForNextLevel?: number;
+  nodeCompleted?: boolean;
+  trackCompleted?: boolean;
 };
 

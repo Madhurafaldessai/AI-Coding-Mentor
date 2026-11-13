@@ -1,14 +1,15 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { progressService } from "../services/progress.service";
 import { AttemptPayload } from "@mentor/shared";
+import { AuthenticatedRequest } from "../middleware/requireAuth";
 
 export async function handleProgressRecord(
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const { challengeId, code, passed, total, errorType, hintLevelUsed } = req.body as AttemptPayload;
+    const { challengeId, code, passed, total, errorType, hintLevelUsed, language } = req.body as AttemptPayload;
 
     if (!challengeId || typeof code !== "string" || typeof passed !== "number" || typeof total !== "number") {
       res.status(400).json({
@@ -23,8 +24,8 @@ export async function handleProgressRecord(
       passed,
       total,
       errorType,
-      hintLevelUsed: hintLevelUsed || 0,
-    });
+      hintLevelUsed: hintLevelUsed || 0, language,
+    }, req.user.id);
 
     res.json(result);
   } catch (error) {

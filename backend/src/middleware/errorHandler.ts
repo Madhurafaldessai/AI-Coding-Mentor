@@ -16,9 +16,6 @@ export function errorHandler(
 
   console.error(`[Error] ${req.method} ${req.url} (${statusCode}):`, message);
 
-  res.status(statusCode).json({
-    error: message,
-    statusCode,
-  });
+  res.status(statusCode).json({ error: { code: statusCode === 503 ? "DATABASE_NOT_READY" : "INTERNAL_ERROR", message } });
 }
 

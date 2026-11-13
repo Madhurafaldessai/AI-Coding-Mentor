@@ -52,6 +52,7 @@ export const SuccessModal: React.FC<SuccessModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- opening starts an asynchronous request.
       fetchProgress();
     } else {
       setProgressData(null);

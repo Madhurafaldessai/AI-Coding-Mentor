@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Node.js script connecting to Chrome via CDP to run and verify browser tests
 const { spawn } = require("child_process");
 

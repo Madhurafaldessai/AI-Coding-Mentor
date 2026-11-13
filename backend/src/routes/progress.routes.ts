@@ -4,7 +4,7 @@ import { handleProgressRecord } from "../controllers/progress.controller";
 const router = Router();
 
 // POST /api/progress
-router.post("/progress", handleProgressRecord);
+router.post("/progress", handleProgressRecord as any);
 
 export default router;
 

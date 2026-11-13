@@ -29,6 +29,7 @@ export const RunBar: React.FC<RunBarProps> = ({
   useEffect(() => {
     if (typeof window !== "undefined") {
       const platform = window.navigator.platform || window.navigator.userAgent || "";
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- browser capability is read once after hydration.
       setIsMac(/Mac/i.test(platform));
     }
   }, []);

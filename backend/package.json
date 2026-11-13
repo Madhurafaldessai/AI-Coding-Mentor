@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "db:check": "tsx src/scripts/db-check.ts"
   },
   "dependencies": {
     "@ai-sdk/cerebras": "^3.0.92",
