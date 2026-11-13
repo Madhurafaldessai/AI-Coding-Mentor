@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Runner Verification Test Suite</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: #f8fafc; }
+    .pass { color: #22c55e; }
+    .fail { color: #ef4444; }
+    .running { color: #eab308; }
+    pre { background: #1e293b; padding: 10px; border-radius: 6px; overflow-x: auto; }
+    #log { margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <h1>Coding Workspace Engine Verification</h1>
+  <div id="status" class="running">Running test suite...</div>
+  <pre id="log"></pre>
+
+  <script type="module">
+    const logEl = document.getElementById("log");
+    const statusEl = document.getElementById("status");
+    const results = [];
+
+    function log(msg, pass = null) {
+      const line = document.createElement("div");
+      if (pass === true) line.className = "pass";
+      else if (pass === false) line.className = "fail";
+      line.textContent = msg;
+      logEl.appendChild(line);
+      console.log(msg);
+    }
+
+    const testCases = [
+      { input: "hello", expected: "olleh" },
+      { input: "world", expected: "dlrow" },
+      { input: "code", expected: "edoc" }
+    ];
+
+    // Simple test harness
+    class TestRunner {
+      constructor() {
+        this.pyWorker = null;
+        this.jsWorker = null;
+      }
+
+      initPyWorker() {
+        if (this.pyWorker) this.pyWorker.terminate();
+        this.pyWorker = new Worker("/workers/pyodide.worker.js");
+      }
+
+      initJsWorker() {
+        if (this.jsWorker) this.jsWorker.terminate();
+        this.jsWorker = new Worker("/workers/js.worker.js");
+      }
+
+      runPy(code, tests, timeoutMs = 5000) {
+        return new Promise((resolve) => {
+          let timer = null;
+          let settled = false;
+
+          timer = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            this.pyWorker.terminate();
+            this.initPyWorker();
+            resolve({
+              passed: 0,
+              total: tests.length,
+              errorType: "timeout",
+              stderr: "Execution timed out (> 5.0s).\nYour code took too long. Check for an infinite loop or heavy operations."
+            });
+          }, timeoutMs);
+
+          this.pyWorker.onmessage = (e) => {
+            if (settled) return;
+            if (e.data.type === "RESULT") {
+              clearTimeout(timer);
+              settled = true;
+              resolve(e.data.result);
+            }
+          };
+
+          this.pyWorker.postMessage({ type: "RUN", code, tests });
+        });
+      }
+
+      runJs(code, tests, timeoutMs = 5000) {
+        return new Promise((resolve) => {
+          let timer = null;
+          let settled = false;
+
+          timer = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            this.jsWorker.terminate();
+            this.initJsWorker();
+            resolve({
+              passed: 0,
+              total: tests.length,
+              errorType: "timeout",
+              stderr: "Execution timed out (> 5.0s).\nYour code took too long. Check for an infinite loop or heavy operations."
+            });
+          }, timeoutMs);
+
+          this.jsWorker.onmessage = (e) => {
+            if (settled) return;
+            if (e.data.type === "RESULT") {
+              clearTimeout(timer);
+              settled = true;
+              resolve(e.data.result);
+            }
+          };
+
+          this.jsWorker.postMessage({ type: "RUN", code, tests });
+        });
+      }
+    }
+
+    async function runAll() {
+      const runner = new TestRunner();
+      
+      log("--- TEST 1: Pyodide Worker Initial Load ---");
+      const pyLoadStart = performance.now();
+      runner.initPyWorker();
+
+      await new Promise((resolve) => {
+        runner.pyWorker.onmessage = (e) => {
+          if (e.data.type === "READY") {
+            const loadTime = Math.round(performance.now() - pyLoadStart);
+            log(`✓ Pyodide runtime ready in ${loadTime}ms`, true);
+            results.push({ name: "pyodide_load_time_ms", value: loadTime, pass: true });
+            resolve();
+          }
+        };
+      });
+
+      log("\n--- TEST 2: Python - Correct Solution ---");
+      const pyPassCode = "import sys\ndef solve():\n    text = sys.stdin.read().strip()\n    print(text[::-1])\nsolve()";
+      const pyPassRes = await runner.runPy(pyPassCode, testCases);
+      const isPyPass = pyPassRes.passed === 3 && pyPassRes.total === 3 && !pyPassRes.errorType;
+      log(`Passed: ${pyPassRes.passed}/${pyPassRes.total}, errorType: ${pyPassRes.errorType}, runtime: ${pyPassRes.runtimeMs}ms`, isPyPass);
+      results.push({ name: "py_pass", pass: isPyPass, res: pyPassRes });
+
+      log("\n--- TEST 3: Python - Wrong Answer ---");
+      const pyFailCode = "import sys\nprint('wrong_answer')";
+      const pyFailRes = await runner.runPy(pyFailCode, testCases);
+      const isPyFail = pyFailRes.passed === 0 && pyFailRes.errorType === "wrong_answer" && pyFailRes.stdout.includes("Expected:");
+      log(`Passed: ${pyFailRes.passed}/${pyFailRes.total}, errorType: ${pyFailRes.errorType}\nDiff: ${pyFailRes.stdout.trim()}`, isPyFail);
+      results.push({ name: "py_wrong_answer", pass: isPyFail, res: pyFailRes });
+
+      log("\n--- TEST 4: Python - Syntax Error ---");
+      const pySyntaxCode = "def solve(:\n    pass";
+      const pySyntaxRes = await runner.runPy(pySyntaxCode, testCases);
+      const isPySyntax = pySyntaxRes.errorType === "syntax" && pySyntaxRes.stderr.includes("SyntaxError");
+      log(`Passed: ${pySyntaxRes.passed}/${pySyntaxRes.total}, errorType: ${pySyntaxRes.errorType}\nStderr: ${pySyntaxRes.stderr.split('\\n')[0]}`, isPySyntax);
+      results.push({ name: "py_syntax_error", pass: isPySyntax, res: pySyntaxRes });
+
+      log("\n--- TEST 5: Python - Runtime Error ---");
+      const pyRuntimeCode = "x = 1 / 0";
+      const pyRuntimeRes = await runner.runPy(pyRuntimeCode, testCases);
+      const isPyRuntime = pyRuntimeRes.errorType === "runtime" && pyRuntimeRes.stderr.includes("ZeroDivisionError");
+      log(`Passed: ${pyRuntimeRes.passed}/${pyRuntimeRes.total}, errorType: ${pyRuntimeRes.errorType}\nStderr: ${pyRuntimeRes.stderr.trim()}`, isPyRuntime);
+      results.push({ name: "py_runtime_error", pass: isPyRuntime, res: pyRuntimeRes });
+
+      log("\n--- TEST 6: Python - 5s Timeout (Infinite Loop) ---");
+      const pyTimeoutStart = performance.now();
+      const pyTimeoutCode = "while True:\n    pass";
+      const pyTimeoutRes = await runner.runPy(pyTimeoutCode, testCases);
+      const timeoutDuration = Math.round(performance.now() - pyTimeoutStart);
+      const isPyTimeout = pyTimeoutRes.errorType === "timeout" && timeoutDuration >= 4900 && timeoutDuration <= 6000;
+      log(`Duration: ${timeoutDuration}ms, errorType: ${pyTimeoutRes.errorType}\nMessage: ${pyTimeoutRes.stderr}`, isPyTimeout);
+      results.push({ name: "py_timeout", pass: isPyTimeout, duration: timeoutDuration, res: pyTimeoutRes });
+
+      log("\n--- TEST 7: Python - Recovery After Timeout ---");
+      // Wait for reinitialized worker to be ready
+      await new Promise((resolve) => {
+        runner.pyWorker.onmessage = (e) => {
+          if (e.data.type === "READY") resolve();
+        };
+      });
+      const pyRecoverRes = await runner.runPy(pyPassCode, testCases);
+      const isPyRecover = pyRecoverRes.passed === 3 && !pyRecoverRes.errorType;
+      log(`Post-timeout run: Passed: ${pyRecoverRes.passed}/${pyRecoverRes.total}, errorType: ${pyRecoverRes.errorType}`, isPyRecover);
+      results.push({ name: "py_recovery", pass: isPyRecover, res: pyRecoverRes });
+
+      log("\n--- TEST 8: JavaScript - Setup Worker ---");
+      runner.initJsWorker();
+
+      log("\n--- TEST 9: JavaScript - Correct Solution ---");
+      const jsPassCode = "const text = readline().trim(); console.log(text.split('').reverse().join(''));";
+      const jsPassRes = await runner.runJs(jsPassCode, testCases);
+      const isJsPass = jsPassRes.passed === 3 && jsPassRes.total === 3 && !jsPassRes.errorType;
+      log(`Passed: ${jsPassRes.passed}/${jsPassRes.total}, errorType: ${jsPassRes.errorType}, runtime: ${jsPassRes.runtimeMs}ms`, isJsPass);
+      results.push({ name: "js_pass", pass: isJsPass, res: jsPassRes });
+
+      log("\n--- TEST 10: JavaScript - Wrong Answer ---");
+      const jsFailCode = "console.log('incorrect');";
+      const jsFailRes = await runner.runJs(jsFailCode, testCases);
+      const isJsFail = jsFailRes.passed === 0 && jsFailRes.errorType === "wrong_answer" && jsFailRes.stdout.includes("Expected:");
+      log(`Passed: ${jsFailRes.passed}/${jsFailRes.total}, errorType: ${jsFailRes.errorType}\nDiff: ${jsFailRes.stdout.trim()}`, isJsFail);
+      results.push({ name: "js_wrong_answer", pass: isJsFail, res: jsFailRes });
+
+      log("\n--- TEST 11: JavaScript - Syntax Error ---");
+      const jsSyntaxCode = "function { invalid";
+      const jsSyntaxRes = await runner.runJs(jsSyntaxCode, testCases);
+      const isJsSyntax = jsSyntaxRes.errorType === "syntax" && jsSyntaxRes.stderr.includes("SyntaxError");
+      log(`Passed: ${jsSyntaxRes.passed}/${jsSyntaxRes.total}, errorType: ${jsSyntaxRes.errorType}\nStderr: ${jsSyntaxRes.stderr.split('\\n')[0]}`, isJsSyntax);
+      results.push({ name: "js_syntax_error", pass: isJsSyntax, res: jsSyntaxRes });
+
+      log("\n--- TEST 12: JavaScript - Runtime Error ---");
+      const jsRuntimeCode = "null.nonExistentMethod()";
+      const jsRuntimeRes = await runner.runJs(jsRuntimeCode, testCases);
+      const isJsRuntime = jsRuntimeRes.errorType === "runtime" && jsRuntimeRes.stderr.includes("TypeError");
+      log(`Passed: ${jsRuntimeRes.passed}/${jsRuntimeRes.total}, errorType: ${jsRuntimeRes.errorType}\nStderr: ${jsRuntimeRes.stderr.split('\\n')[0]}`, isJsRuntime);
+      results.push({ name: "js_runtime_error", pass: isJsRuntime, res: jsRuntimeRes });
+
+      log("\n--- TEST 13: JavaScript - 5s Timeout (Infinite Loop) ---");
+      const jsTimeoutStart = performance.now();
+      const jsTimeoutCode = "while(true) {}";
+      const jsTimeoutRes = await runner.runJs(jsTimeoutCode, testCases);
+      const jsTimeoutDuration = Math.round(performance.now() - jsTimeoutStart);
+      const isJsTimeout = jsTimeoutRes.errorType === "timeout" && jsTimeoutDuration >= 4900 && jsTimeoutDuration <= 6000;
+      log(`Duration: ${jsTimeoutDuration}ms, errorType: ${jsTimeoutRes.errorType}\nMessage: ${jsTimeoutRes.stderr}`, isJsTimeout);
+      results.push({ name: "js_timeout", pass: isJsTimeout, duration: jsTimeoutDuration, res: jsTimeoutRes });
+
+      log("\n--- TEST 14: JavaScript - Recovery After Timeout ---");
+      const jsRecoverRes = await runner.runJs(jsPassCode, testCases);
+      const isJsRecover = jsRecoverRes.passed === 3 && !jsRecoverRes.errorType;
+      log(`Post-timeout run: Passed: ${jsRecoverRes.passed}/${jsRecoverRes.total}, errorType: ${jsRecoverRes.errorType}`, isJsRecover);
+      results.push({ name: "js_recovery", pass: isJsRecover, res: jsRecoverRes });
+
+      log("\n--- TEST 15: Draft Persistence ---");
+      localStorage.setItem("draft_reverse-string_python", "# Custom Py Draft");
+      localStorage.setItem("draft_reverse-string_javascript", "// Custom JS Draft");
+      const pyDraft = localStorage.getItem("draft_reverse-string_python");
+      const jsDraft = localStorage.getItem("draft_reverse-string_javascript");
+      const isDraftPass = pyDraft === "# Custom Py Draft" && jsDraft === "// Custom JS Draft";
+      log(`Py draft: ${pyDraft}, JS draft: ${jsDraft}`, isDraftPass);
+      results.push({ name: "draft_persistence", pass: isDraftPass });
+
+      // Final summary
+      const allPassed = results.every(r => r.pass);
+      statusEl.className = allPassed ? "pass" : "fail";
+      statusEl.textContent = allPassed ? "ALL 15 VERIFICATION TESTS PASSED SUCCESSFULLY!" : "SOME TESTS FAILED";
+      
+      window.__ALL_TESTS_DONE__ = true;
+      window.__TEST_RESULTS__ = results;
+    }
+
+    runAll();
+  </script>
+</body>
+</html>

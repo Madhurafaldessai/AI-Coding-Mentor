@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Eye } from "lucide-react";
 import { sessionStore } from "@/lib/session";
 
@@ -24,6 +25,7 @@ const ClosedEyeIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5"
 );
 
 export const OnboardingFlow: React.FC = () => {
+  const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,6 +59,9 @@ export const OnboardingFlow: React.FC = () => {
       email: email.trim(),
       isGuest: false,
     });
+
+    // TODO: Temporary shortcut directly to workspace as requested. Remove once Onboarding 2 & 3 artwork is ready.
+    router.push("/challenge/reverse-string");
   };
 
   const handleGoogleSignIn = () => {
@@ -64,17 +69,21 @@ export const OnboardingFlow: React.FC = () => {
       email: "guest.student@example.com",
       isGuest: true,
     });
+
+    // TODO: Temporary shortcut directly to workspace as requested. Remove once Onboarding 2 & 3 artwork is ready.
+    router.push("/challenge/reverse-string");
   };
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center p-4 overflow-hidden">
-      {/* 1. Full-Bleed Background Image with Sky-Blue Fallback */}
+      {/* 1. Fixed Full-Viewport Background Element */}
       <div
-        className="fixed inset-0 z-0 bg-[#7DD3FC] bg-cover bg-bottom bg-no-repeat pointer-events-none"
+        className="fixed inset-0 z-0 bg-[#7DD3FC] pointer-events-none image-pixelated"
         style={{
-          backgroundImage:
-            "url('/images/meadow-bg.png'), url('/images/meadow-bg.webp'), linear-gradient(180deg, #7DD3FC 0%, #A7F3D0 65%, #22C55E 100%)",
-          imageRendering: "pixelated",
+          backgroundImage: "url('/images/meadow-bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
         }}
         aria-hidden="true"
       />
