@@ -70,10 +70,12 @@ export const OnboardingFlow: React.FC = () => {
     <div className="relative min-h-screen w-full flex items-center justify-center p-4 overflow-hidden">
       {/* 1. Full-Bleed Background Image with Sky-Blue Fallback */}
       <div
-        className="fixed inset-0 z-0 bg-[#7DD3FC] bg-cover bg-bottom bg-no-repeat pointer-events-none"
+        className="fixed inset-0 z-0 bg-[#7DD3FC] bg-cover bg-bottom bg-no-repeat pointer-events-none image-pixelated"
         style={{
           backgroundImage:
-            "url('/images/meadow-bg.png'), url('/images/meadow-bg.webp'), linear-gradient(180deg, #7DD3FC 0%, #A7F3D0 65%, #22C55E 100%)",
+            "url('/images/meadow-bg.png'), url('/images/meadow-bg.jpg'), linear-gradient(180deg, #7DD3FC 0%, #A7F3D0 65%, #22C55E 100%)",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
           imageRendering: "pixelated",
         }}
         aria-hidden="true"
