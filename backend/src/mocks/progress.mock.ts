@@ -23,3 +23,4 @@ export function getMockProgressResponse(attempt: AttemptPayload): ProgressRespon
     nextChallengeId: attempt.challengeId === "reverse-string" ? "find-max" : "two-sum",
   };
 }
+

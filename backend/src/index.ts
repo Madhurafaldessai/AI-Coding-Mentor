@@ -6,3 +6,4 @@ app.listen(env.port, () => {
   console.log(`⚡ [Backend] Frontend Origin: ${env.frontendOrigin}`);
   console.log(`⚡ [Backend] Mock AI Mode: ${env.useMockAi ? "ENABLED" : "DISABLED"}`);
 });
+

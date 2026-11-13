@@ -26,3 +26,4 @@ export function getMockMentorResponse(
     confidence_signal: signals[requestedLevel] || "close",
   };
 }
+

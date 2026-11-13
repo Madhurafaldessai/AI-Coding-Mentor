@@ -7,3 +7,4 @@ const router = Router();
 router.post("/progress", handleProgressRecord);
 
 export default router;
+

@@ -11,3 +11,4 @@ export const getDbClient = () => {
   // return createClient(env.supabaseUrl, env.supabaseServiceKey);
   return null;
 };
+

@@ -45,3 +45,4 @@ export type ProgressResponse = {
   newBadges: string[];
   nextChallengeId: string;
 };
+

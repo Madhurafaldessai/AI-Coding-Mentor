@@ -7,3 +7,4 @@ export function handleHealthCheck(req: Request, res: Response): void {
     service: "ai-coding-mentor-backend",
   });
 }
+
